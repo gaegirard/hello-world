@@ -1,0 +1,20 @@
+Un mémo des commandes git
+
+# Pour créer un répertoire git:
+git init
+
+# Pour ajouter un fichier au répertoire:
+git add filename
+
+# Et ensuite enregistrer le changement:
+git commit -m 'changes'
+
+# On peut vérifier l'état du répo:
+git status
+
+# Et comparer les éventuels changements réalisés depuis la dernière "sauvegarde":
+git diff
+
+# Les fichiers (ou dossiers) à être ignorés par git sont ajoutés dans le fichier .gitignore
+# par exemple les modules python importés ou les env. virtuels
+

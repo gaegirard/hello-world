@@ -1,4 +1,22 @@
-# Un mémo des commandes git
+# GIT
+
+##################################
+
+## Alias
+
+g        git
+gsh      git status
+gl       git pull
+gp       git push
+gcmsg    git commit -m
+gcm      git checkout master
+gb       git branch
+ga       git add
+gm       git merge
+
+###################################
+
+## Un mémo des commandes git
 
 Pour créer un répertoire git:
 $ git init
@@ -32,3 +50,48 @@ $ git remote -v
 
 Pousser des modifications
 $ git push <REMOTENAME> <BRANCH>
+
+
+## Git commands that can help resolve merge conflicts
+
+### General tools
+
+$ git status
+	The status command is in frequent use when a working with Git and during a merge it will help identify conflicted files.
+
+$ git log --merge
+	Passing the --merge argument to the git log command will produce a log with a list of commits that conflict between the merging branches.
+
+$ git diff
+	diff helps find differences between states of a repository/files. This is useful in predicting and preventing merge conflicts.
+
+### Tools for when git fails to start a merge
+
+$ git checkout
+	checkout can be used for undoing changes to files, or for changing branches
+	option -b to create a new branch
+	option -d to delete a branch
+	$ git branch to check existing branches
+
+$ git reset --mixed
+	reset can be used to undo changes to the working directory and staging area.
+
+### Tools for when git conflicts arise during a merge
+
+$ git merge --abort
+	Executing git merge with the --abort option will exit from the merge process and return the branch to the state before the merge began.
+
+$ git reset
+	Git reset can be used during a merge conflict to reset conflicted files to a know good state
+
+###################################
+
+## Git LFS
+
+$ git lfs track ‘FILENAME(S)’ 
+	One can use * to tell git lfs to manage a type of files
+	One can set an entire folder too
+
+$ git lfs ls-files
+	to confirm which specific files lfs is managing
+

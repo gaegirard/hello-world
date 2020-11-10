@@ -17,6 +17,7 @@ gm       git merge
 ###################################
 
 ## Un mémo des commandes git
+https://realpython.com/python-git-github-intro/#basic-usage
 
 Pour créer un répertoire git:
 $ git init
@@ -33,7 +34,8 @@ $ git status
 Et comparer les éventuels changements réalisés depuis la dernière "sauvegarde":
 $ git diff
 
-Les fichiers (ou dossiers) à être ignorés par git sont ajoutés dans le fichier .gitignore
+Les fichiers (ou dossiers) à être ignorés par git sont ajoutés
+dans le fichier .gitignore
 par exemple les modules python importés ou les env. virtuels
 
 Ajouter un remote
@@ -53,17 +55,21 @@ $ git push <REMOTENAME> <BRANCH>
 
 
 ## Git commands that can help resolve merge conflicts
+https://www.atlassian.com/git/tutorials/using-branches/merge-conflicts
 
 ### General tools
 
 $ git status
-	The status command is in frequent use when a working with Git and during a merge it will help identify conflicted files.
+	The status command is in frequent use when a working with Git
+	and during a merge it will help identify conflicted files.
 
 $ git log --merge
-	Passing the --merge argument to the git log command will produce a log with a list of commits that conflict between the merging branches.
+	Passing the --merge argument to the git log command will produce a log
+	with a list of commits that conflict between the merging branches.
 
 $ git diff
-	diff helps find differences between states of a repository/files. This is useful in predicting and preventing merge conflicts.
+	diff helps find differences between states of a repository/files.
+	This is useful in predicting and preventing merge conflicts.
 
 ### Tools for when git fails to start a merge
 
@@ -79,19 +85,93 @@ $ git reset --mixed
 ### Tools for when git conflicts arise during a merge
 
 $ git merge --abort
-	Executing git merge with the --abort option will exit from the merge process and return the branch to the state before the merge began.
+	Executing git merge with the --abort option will exit from the merge process
+	and return the branch to the state before the merge began.
 
 $ git reset
 	Git reset can be used during a merge conflict to reset conflicted files to a know good state
 
 ###################################
 
-## Git LFS
 
-$ git lfs track ‘FILENAME(S)’ 
+## Tips for git reset
+
+Undo add
+
+				$ edit                                     (1)
+				$ git add frotz.c filfre.c
+				$ mailx                                    (2)
+				$ git reset                                (3)
+				$ git pull git://info.example.com/ nitfol  (4)
+
+		1. You are happily working on something, and find the changes in these files are
+		in good order. You do not want to see them when you run "git diff", because you
+		plan to work on other files and changes with these files are distracting.
+		2. Somebody asks you to pull, and the changes sound worthy of merging.
+		3. However, you already dirtied the index (i.e. your index does not match the
+		HEAD commit). But you know the pull you are going to make does not affect frotz.c
+		or filfre.c, so you revert the index changes for these two files. Your changes in
+		working tree remain there.
+		4. Then you can pull and merge, leaving frotz.c and filfre.c changes still in the
+		working tree.
+
+Undo a commit and redo
+
+				$ git commit ...
+				$ git reset --soft HEAD^      (1)
+				$ edit                        (2)
+				$ git commit -a -c ORIG_HEAD  (3)
+
+		1. This is most often done when you remembered what you just committed is
+		incomplete, or you misspelled your commit message, or both. Leaves working tree
+		as it was before "reset".
+		2. Make corrections to working tree files.
+		3. "reset" copies the old head to .git/ORIG_HEAD; redo the commit by starting
+		with its log message. If you do not need to edit the message further, you can
+		give -C option instead.
+
+Undo a commit, making it a topic branch
+
+				$ git branch topic/wip     (1)
+				$ git reset --hard HEAD~3  (2)
+				$ git checkout topic/wip   (3)
+
+		1. You have made some commits, but realize they were premature to be in the
+		"master" branch. You want to continue polishing them in a topic branch, so create
+		"topic/wip" branch off of the current HEAD.
+		2. Rewind the master branch to get rid of those three commits.
+		3. Switch to "topic/wip" branch and keep working.
+
+Undo commits permanently
+
+				$ git commit ...
+				$ git reset --hard HEAD~3   (1)
+
+		1. The last three commits (HEAD, HEAD^, and HEAD~2) were bad and you do not want
+		to ever see them again. Do not do this if you have already given these commits to
+		somebody else. (See the "RECOVERING FROM UPSTREAM REBASE" section in git-
+		rebase(1) for the implications of doing so.)
+
+###################################
+
+## Git LFS
+https://www.atlassian.com/git/tutorials/git-lfs
+
+$ git lfs track ‘FILENAME(S)’
 	One can use * to tell git lfs to manage a type of files
 	One can set an entire folder too
 
 $ git lfs ls-files
 	to confirm which specific files lfs is managing
 
+###################################
+
+## nbdime to manage jupyter notebook on git
+https://nbdime.readthedocs.io/en/latest/vcs.html#git-integration
+https://nbdime.readthedocs.io/en/latest/index.html
+
+$ nbdime config-git --enable --global
+	To enable nbdime on the current git repo
+
+$ nbdiff-web [<commit>] <path>
+	To launch the rich, web-based tools (for diff visualization and merge conflict visualization/resolution)
